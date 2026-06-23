@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Badreddine Zouaoui — Ingénieur Mécatronique & Systèmes Embarqués</title>
+<meta name="description" content="Portfolio de Badreddine Zouaoui, ingénieur d'État en mécatronique et Master 2 Systèmes Automatiques Mobiles. Systèmes embarqués, automatique, commande temps réel et vision par ordinateur." />
+<meta name="author" content="Badreddine Zouaoui" />
+<meta name="theme-color" content="#0b0e13" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Badreddine Zouaoui — Ingénieur Mécatronique & Systèmes Embarqués" />
+<meta property="og:description" content="Du capteur à la commande temps réel : conception, prototypage et fiabilisation de systèmes mécatroniques et embarqués." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<style>
+/* ============================================================
+   DESIGN TOKENS
+   Base : encre froide (papier d'atelier) + accent ambre signal.
+   Le warm-sur-cool évoque les lampes de signalisation et le cuivre
+   des pistes, l'univers de l'électronique et du ferroviaire.
+   ============================================================ */
+:root{
+  --bg:#0b0e13;
+  --bg-elev:#10151d;
+  --bg-elev-2:#161d27;
+  --border:#222b38;
+  --border-strong:#324154;
+  --text:#e9eef4;
+  --text-dim:#9db0c2;
+  --text-faint:#65788c;
+  --accent:#e8a93c;          /* ambre signal */
+  --accent-soft:rgba(232,169,60,.12);
+  --accent-line:rgba(232,169,60,.30);
+  --danger:#e0604a;          /* signal fermé (sémantique ferroviaire) */
+  --grid:rgba(120,150,180,.045);
+  --shadow:0 18px 40px -22px rgba(0,0,0,.75);
+  --radius:14px;
+  --maxw:1100px;
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --font-display:"Space Grotesk",system-ui,sans-serif;
+  --font-body:"IBM Plex Sans",system-ui,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+html[data-theme="light"]{
+  --bg:#f6f8fb;
+  --bg-elev:#ffffff;
+  --bg-elev-2:#eef2f7;
+  --border:#dde4ed;
+  --border-strong:#c1ccda;
+  --text:#0e1722;
+  --text-dim:#4b5b6c;
+  --text-faint:#7d8da0;
+  --accent:#a8650f;
+  --accent-soft:rgba(168,101,15,.10);
+  --accent-line:rgba(168,101,15,.28);
+  --danger:#c2402b;
+  --grid:rgba(40,70,110,.05);
+  --shadow:0 16px 36px -24px rgba(40,60,90,.35);
+}
+
+/* ============================================================ RESET / BASE */
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--font-body);
+  font-size:16px;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  transition:background .4s var(--ease),color .4s var(--ease);
+}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+ul{list-style:none}
+::selection{background:var(--accent);color:#0b0e13}
+
+.container{width:100%;max-width:var(--maxw);margin:0 auto;padding:0 28px}
+
+/* ============================================================ ICONS (sprite) */
+.icon{width:20px;height:20px;display:inline-block;vertical-align:middle;flex:none}
+.svg-sprite{position:absolute;width:0;height:0;overflow:hidden}
+
+/* ============================================================ NAV */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  backdrop-filter:saturate(140%) blur(10px);
+  background:color-mix(in srgb,var(--bg) 80%,transparent);
+  border-bottom:1px solid transparent;
+  transition:border-color .3s var(--ease),background .3s var(--ease),box-shadow .3s var(--ease);
+}
+.nav.scrolled{border-color:var(--border);box-shadow:0 1px 0 rgba(0,0,0,.04)}
+.nav__inner{display:flex;align-items:center;justify-content:space-between;height:68px}
+.nav__logo{display:flex;align-items:center;gap:11px;font-family:var(--font-mono);font-weight:500;letter-spacing:.02em}
+.nav__mark{
+  width:34px;height:34px;border:1.5px solid var(--border-strong);border-radius:9px;
+  display:grid;place-items:center;font-family:var(--font-display);font-weight:700;font-size:14px;
+  color:var(--accent);transition:border-color .3s var(--ease),transform .4s var(--ease);
+}
+.nav__logo:hover .nav__mark{border-color:var(--accent);transform:rotate(-6deg)}
+.nav__logo span{font-size:14.5px;color:var(--text)}
+.nav__logo span b{color:var(--accent);font-weight:500}
+
+.nav__right{display:flex;align-items:center;gap:14px}
+.nav__menu{display:flex;align-items:center;gap:8px}
+.nav__menu ul{display:flex;align-items:center;gap:4px}
+.nav__link{
+  font-family:var(--font-mono);font-size:13px;color:var(--text-dim);
+  padding:8px 12px;border-radius:8px;position:relative;transition:color .25s var(--ease);
+}
+.nav__link .num{color:var(--accent);font-size:11px;margin-right:5px;opacity:.85}
+.nav__link:hover,.nav__link.active{color:var(--text)}
+.nav__link.active{background:var(--accent-soft)}
+
+.theme-toggle{
+  width:40px;height:40px;border:1px solid var(--border);border-radius:10px;
+  display:grid;place-items:center;color:var(--text-dim);
+  transition:border-color .25s var(--ease),color .25s var(--ease),background .25s var(--ease);
+}
+.theme-toggle:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+.theme-toggle .icon-moon{display:none}
+html[data-theme="light"] .theme-toggle .icon-sun{display:none}
+html[data-theme="light"] .theme-toggle .icon-moon{display:block}
+
+.btn{
+  display:inline-flex;align-items:center;gap:9px;
+  font-family:var(--font-mono);font-size:13px;font-weight:500;
+  padding:10px 18px;border-radius:10px;transition:all .25s var(--ease);white-space:nowrap;
+}
+.btn--ghost{border:1px solid var(--accent-line);color:var(--accent)}
+.btn--ghost:hover{background:var(--accent-soft);border-color:var(--accent);transform:translateY(-1px)}
+.btn--solid{background:var(--accent);color:#0b0e13;font-weight:600;border:1px solid var(--accent)}
+.btn--solid:hover{transform:translateY(-2px);box-shadow:0 10px 24px -10px var(--accent)}
+.btn--lg{padding:14px 26px;font-size:14px}
+
+.nav__toggle{display:none;width:40px;height:40px;border:1px solid var(--border);border-radius:10px;place-items:center;color:var(--text)}
+
+/* ============================================================ HERO */
+.hero{position:relative;min-height:100svh;display:flex;align-items:center;padding:120px 0 80px;scroll-margin-top:80px;overflow:hidden}
+.hero__grid{
+  position:absolute;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:46px 46px;
+  -webkit-mask-image:radial-gradient(120% 90% at 70% 35%,#000 30%,transparent 78%);
+  mask-image:radial-gradient(120% 90% at 70% 35%,#000 30%,transparent 78%);
+}
+.hero__glow{
+  position:absolute;z-index:0;width:620px;height:620px;right:-160px;top:-120px;border-radius:50%;
+  background:radial-gradient(circle,var(--accent-soft),transparent 62%);pointer-events:none;filter:blur(6px);
+}
+.hero__inner{position:relative;z-index:1;display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;width:100%}
+
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:var(--font-mono);font-size:12.5px;letter-spacing:.04em;color:var(--accent);margin-bottom:22px}
+.eyebrow::before{content:"";width:30px;height:1px;background:var(--accent-line)}
+
+.hero h1{font-family:var(--font-display);font-weight:700;font-size:clamp(2.6rem,6vw,4.4rem);line-height:1.02;letter-spacing:-.02em;color:var(--text)}
+.hero h2{font-family:var(--font-display);font-weight:500;font-size:clamp(1.25rem,3vw,2.1rem);line-height:1.18;color:var(--text-dim);margin-top:10px;letter-spacing:-.01em;max-width:24ch;text-wrap:balance}
+.hero h2 .hl{color:var(--text)}
+.hero__lead{margin-top:24px;max-width:54ch;color:var(--text-dim);font-size:1.02rem}
+.hero__lead b{color:var(--text);font-weight:600}
+.hero__cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}
+.hero__socials{display:flex;gap:6px;margin-top:34px}
+.social{
+  width:42px;height:42px;border:1px solid var(--border);border-radius:11px;display:grid;place-items:center;
+  color:var(--text-dim);transition:all .25s var(--ease);
+}
+.social:hover{color:var(--accent);border-color:var(--accent);transform:translateY(-3px);background:var(--accent-soft)}
+
+.hero__scroll{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:1;display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--text-faint);font-family:var(--font-mono);font-size:11px;letter-spacing:.18em}
+.hero__scroll .chev{animation:bob 1.8s var(--ease) infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+
+/* ---- Signature : schéma d'itinéraire / aiguillage ---- */
+.switch{position:relative}
+.switch svg{width:100%;height:auto;overflow:visible}
+.sw-frame{stroke:var(--border-strong);stroke-width:1.4;fill:none;opacity:.6}
+.sw-tie{stroke:var(--border-strong);stroke-width:2;opacity:.5;stroke-linecap:round}
+.sw-rail-muted{stroke:var(--border-strong);stroke-width:2.4;fill:none;stroke-linecap:round}
+.sw-rail-active{stroke:var(--accent);stroke-width:3;fill:none;stroke-linecap:round;filter:drop-shadow(0 0 6px var(--accent-soft))}
+.sw-blade{stroke:var(--accent);stroke-width:3;stroke-linecap:round}
+.sw-dot{fill:var(--accent);filter:drop-shadow(0 0 7px var(--accent))}
+.sw-sig-open{fill:var(--accent)}
+.sw-sig-open-ring{stroke:var(--accent);fill:none;stroke-width:1.4;opacity:.5}
+.sw-sig-closed{fill:var(--danger);animation:sigBlink 1.6s steps(1,end) infinite}
+.sw-label{font-family:var(--font-mono);font-size:11px;fill:var(--text-faint);letter-spacing:.04em}
+.sw-label.on{fill:var(--accent)}
+@keyframes sigBlink{0%,55%{opacity:1}56%,100%{opacity:.18}}
+.switch__cap{margin-top:14px;font-family:var(--font-mono);font-size:11.5px;color:var(--text-faint);letter-spacing:.03em;display:flex;align-items:center;gap:8px}
+.switch__cap .dotmark{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent)}
+
+/* ============================================================ SECTIONS */
+.section{padding:108px 0;scroll-margin-top:80px;position:relative}
+.section--alt{background:var(--bg-elev);border-block:1px solid var(--border)}
+.head{margin-bottom:52px;max-width:760px}
+.kicker{display:flex;align-items:center;gap:14px;font-family:var(--font-mono);font-size:12.5px;color:var(--accent);letter-spacing:.06em;margin-bottom:16px}
+.kicker .idx{color:var(--text-faint)}
+.kicker .rule{flex:1;height:1px;background:var(--border);max-width:120px}
+.head h2{font-family:var(--font-display);font-weight:700;font-size:clamp(1.8rem,4vw,2.6rem);letter-spacing:-.02em;line-height:1.1}
+.head p{margin-top:14px;color:var(--text-dim);max-width:62ch}
+
+/* ---- ABOUT ---- */
+.about{display:grid;grid-template-columns:1.5fr 1fr;gap:46px;align-items:start}
+.about__body p{color:var(--text-dim);margin-bottom:18px}
+.about__body p b{color:var(--text);font-weight:600}
+.about__body .accenttext{color:var(--accent)}
+.spec{
+  border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-elev-2);
+  padding:6px 0;font-family:var(--font-mono);font-size:13px;position:relative;overflow:hidden;
+}
+html[data-theme="light"] .section--alt .spec{background:var(--bg)}
+.spec::before{content:"SPÉCIFICATIONS";position:absolute;top:0;left:0;right:0;font-size:10px;letter-spacing:.18em;color:var(--text-faint);padding:13px 18px 0}
+.spec__row{display:flex;justify-content:space-between;gap:14px;padding:11px 18px;border-bottom:1px dashed var(--border)}
+.spec__row:first-of-type{margin-top:26px}
+.spec__row:last-child{border-bottom:none}
+.spec__row .k{color:var(--text-faint)}
+.spec__row .v{color:var(--text);text-align:right}
+.spec__row .v.ok{color:var(--accent)}
+
+/* ---- TIMELINE (Expérience + Formation) ---- */
+.timeline{position:relative;margin-left:6px}
+.timeline::before{content:"";position:absolute;left:0;top:6px;bottom:6px;width:1.5px;background:linear-gradient(var(--border-strong),var(--border) 80%,transparent)}
+.tl{position:relative;padding:0 0 40px 34px}
+.tl:last-child{padding-bottom:0}
+.tl::before{
+  content:"";position:absolute;left:-5.5px;top:5px;width:13px;height:13px;border-radius:50%;
+  background:var(--bg);border:2px solid var(--border-strong);transition:all .3s var(--ease);
+}
+.tl:hover::before,.tl--now::before{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+.tl__date{font-family:var(--font-mono);font-size:12px;color:var(--accent);letter-spacing:.02em;margin-bottom:6px;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.tl__badge{font-size:10px;padding:2px 8px;border:1px solid var(--accent-line);border-radius:20px;color:var(--accent);letter-spacing:.05em}
+.tl__role{font-family:var(--font-display);font-size:1.18rem;font-weight:600;line-height:1.25}
+.tl__org{color:var(--text-dim);font-size:.95rem;margin-bottom:14px}
+.tl__org .at{color:var(--accent)}
+.tl__list li{position:relative;padding-left:20px;color:var(--text-dim);font-size:.95rem;margin-bottom:8px}
+.tl__list li::before{content:"▸";position:absolute;left:0;color:var(--accent);font-size:.8rem;top:1px}
+.tl__sub{color:var(--text-dim);font-size:.95rem}
+.tl__sub b{color:var(--text)}
+
+/* ---- PROJECTS ---- */
+.projects{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+.project{
+  grid-column:span 1;border:1px solid var(--border);border-radius:var(--radius);
+  background:var(--bg-elev-2);padding:26px 26px 24px;display:flex;flex-direction:column;
+  position:relative;overflow:hidden;transition:border-color .3s var(--ease),transform .3s var(--ease),box-shadow .3s var(--ease);
+}
+html[data-theme="light"] .section--alt .project{background:var(--bg)}
+.project::after{content:"";position:absolute;left:0;top:0;height:3px;width:0;background:var(--accent);transition:width .4s var(--ease)}
+.project:hover{transform:translateY(-5px);border-color:var(--border-strong);box-shadow:var(--shadow)}
+.project:hover::after{width:100%}
+.project--feature{grid-column:span 2}
+.project__top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.project__ico{width:44px;height:44px;border-radius:11px;border:1px solid var(--border-strong);display:grid;place-items:center;color:var(--accent)}
+.project__meta{font-family:var(--font-mono);font-size:11.5px;color:var(--text-faint);text-align:right}
+.project__tag{display:inline-block;font-family:var(--font-mono);font-size:10px;letter-spacing:.08em;color:var(--accent);border:1px solid var(--accent-line);border-radius:20px;padding:3px 10px;margin-bottom:10px}
+.project__title{font-family:var(--font-display);font-size:1.3rem;font-weight:600;line-height:1.2;margin-bottom:10px}
+.project--feature .project__title{font-size:1.55rem}
+.project__desc{color:var(--text-dim);font-size:.96rem;flex:1}
+.project__stack{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px;font-family:var(--font-mono);font-size:12px;color:var(--text-faint)}
+.project__stack span{position:relative;padding-left:14px}
+.project__stack span::before{content:"";position:absolute;left:0;top:50%;transform:translateY(-50%);width:6px;height:6px;border-radius:50%;background:var(--accent);opacity:.7}
+
+/* ---- SKILLS ---- */
+.skills{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.skill{border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-elev-2);padding:24px;transition:border-color .3s var(--ease),transform .3s var(--ease)}
+html[data-theme="light"] .skill{background:var(--bg-elev)}
+.skill:hover{border-color:var(--border-strong);transform:translateY(-3px)}
+.skill__h{display:flex;align-items:center;gap:11px;margin-bottom:16px}
+.skill__h .icon{color:var(--accent)}
+.skill__h h3{font-family:var(--font-mono);font-size:12.5px;letter-spacing:.05em;color:var(--text);text-transform:uppercase}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-family:var(--font-mono);font-size:12.5px;color:var(--text-dim);background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:6px 11px;transition:all .25s var(--ease)}
+html[data-theme="light"] .chip{background:var(--bg-elev-2)}
+.chip:hover{color:var(--accent);border-color:var(--accent-line);background:var(--accent-soft)}
+
+/* ---- CONTACT ---- */
+.contact{text-align:center;max-width:640px;margin:0 auto}
+.contact .kicker{justify-content:center}
+.contact .kicker .rule{display:none}
+.contact h2{font-family:var(--font-display);font-weight:700;font-size:clamp(2rem,5vw,3rem);letter-spacing:-.02em;margin-bottom:18px}
+.contact p{color:var(--text-dim);margin-bottom:34px;font-size:1.05rem}
+.contact__row{display:flex;gap:6px;justify-content:center;margin-top:30px}
+.contact__line{font-family:var(--font-mono);font-size:13px;color:var(--text-faint);margin-top:26px}
+.contact__line a{color:var(--text-dim);border-bottom:1px solid var(--border)}
+.contact__line a:hover{color:var(--accent);border-color:var(--accent)}
+
+/* ---- FOOTER ---- */
+.footer{border-top:1px solid var(--border);padding:34px 0;text-align:center}
+.footer p{font-family:var(--font-mono);font-size:12.5px;color:var(--text-faint)}
+.footer p b{color:var(--text-dim);font-weight:500}
+.footer .heart{color:var(--accent)}
+
+/* ============================================================ REVEAL ANIM */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+.reveal.d1{transition-delay:.08s}.reveal.d2{transition-delay:.16s}.reveal.d3{transition-delay:.24s}.reveal.d4{transition-delay:.32s}
+
+/* ============================================================ RESPONSIVE */
+@media (max-width:900px){
+  .hero__inner{grid-template-columns:1fr;gap:40px}
+  .switch{max-width:480px}
+  .about{grid-template-columns:1fr;gap:32px}
+  .skills{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:760px){
+  .nav__toggle{display:grid}
+  .nav__menu{
+    position:absolute;top:calc(100% + 10px);right:28px;left:28px;
+    flex-direction:column;align-items:stretch;gap:10px;
+    background:var(--bg-elev);border:1px solid var(--border);border-radius:14px;
+    padding:16px;box-shadow:var(--shadow);
+    opacity:0;visibility:hidden;transform:translateY(-10px);transition:all .3s var(--ease);
+  }
+  .nav__menu.open{opacity:1;visibility:visible;transform:none}
+  .nav__menu ul{flex-direction:column;align-items:stretch;gap:2px}
+  .nav__link{display:block;padding:11px 12px}
+  .nav__menu .btn{justify-content:center;margin-top:6px}
+  .section{padding:78px 0}
+  .head{margin-bottom:38px}
+  .projects{grid-template-columns:1fr}
+  .project--feature{grid-column:span 1}
+  .skills{grid-template-columns:1fr}
+  .hero__scroll{display:none}
+}
+@media (max-width:480px){
+  .container{padding:0 20px}
+  .hero__cta{flex-direction:column;align-items:stretch}
+  .hero__cta .btn{justify-content:center}
+}
+
+/* ============================================================ A11Y */
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+  .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ====================== ICON SPRITE ====================== -->
+<svg class="svg-sprite" aria-hidden="true">
+  <symbol id="i-linkedin" viewBox="0 0 24 24"><path fill="currentColor" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></symbol>
+  <symbol id="i-github" viewBox="0 0 24 24"><path fill="currentColor" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3.5 7.5l8.5 6 8.5-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" d="M3 6h18M3 12h18M3 18h18"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" d="M18 6L6 18M6 6l12 12"/></symbol>
+  <symbol id="i-arrow-down" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M12 5v14M19 12l-7 7-7-7"/></symbol>
+  <symbol id="i-arrow-right" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+  <symbol id="i-cpu" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="9.5" y="9.5" width="5" height="5" rx="1" fill="none" stroke="currentColor" stroke-width="1.8"/><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/></symbol>
+  <symbol id="i-flow" viewBox="0 0 24 24"><rect x="3" y="4" width="7" height="5" rx="1" fill="none" stroke="currentColor" stroke-width="1.7"/><rect x="14" y="15" width="7" height="5" rx="1" fill="none" stroke="currentColor" stroke-width="1.7"/><path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" d="M6.5 9v4a3 3 0 0 0 3 3H14"/></symbol>
+  <symbol id="i-cog" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.7"/><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" d="M14 2v6h6M8 13h8M8 17h6"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" d="M12 3l1.9 4.8L19 9.7l-4 3.4L16 19l-4-2.6L8 19l1-5.9-4-3.4 5.1-.9z"/></symbol>
+  <symbol id="i-drone" viewBox="0 0 24 24"><circle cx="5" cy="5" r="2.4" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="19" cy="5" r="2.4" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="5" cy="19" r="2.4" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="19" cy="19" r="2.4" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="9" y="9" width="6" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path fill="none" stroke="currentColor" stroke-width="1.6" d="M7 7l2 2M15 9l2-2M9 15l-2 2M15 15l2 2"/></symbol>
+  <symbol id="i-track" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" d="M8 3v18M16 3v18M5 8h14M5 16h14"/></symbol>
+</svg>
+
+<!-- ====================== NAV ====================== -->
+<header class="nav" id="nav">
+  <div class="nav__inner container">
+    <a href="#accueil" class="nav__logo" aria-label="Accueil">
+      <span class="nav__mark">BZ</span>
+      <span>Badreddine<b>.Z</b></span>
+    </a>
+    <div class="nav__right">
+      <nav class="nav__menu" id="navMenu" aria-label="Navigation principale">
+        <ul>
+          <li><a class="nav__link" href="#apropos"><span class="num">01</span>À propos</a></li>
+          <li><a class="nav__link" href="#experience"><span class="num">02</span>Expérience</a></li>
+          <li><a class="nav__link" href="#projets"><span class="num">03</span>Projets</a></li>
+          <li><a class="nav__link" href="#competences"><span class="num">04</span>Compétences</a></li>
+          <li><a class="nav__link" href="#formation"><span class="num">05</span>Formation</a></li>
+          <li><a class="nav__link" href="#contact"><span class="num">06</span>Contact</a></li>
+        </ul>
+        <a class="btn btn--ghost" href="cv-badreddine-zouaoui.pdf" download>
+          <svg class="icon" width="17" height="17"><use href="#i-download"/></svg>CV
+        </a>
+      </nav>
+      <button class="theme-toggle" id="themeToggle" aria-label="Basculer le thème clair/sombre">
+        <svg class="icon icon-sun"><use href="#i-sun"/></svg>
+        <svg class="icon icon-moon"><use href="#i-moon"/></svg>
+      </button>
+      <button class="nav__toggle" id="navToggle" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="navMenu">
+        <svg class="icon" id="navToggleIcon"><use href="#i-menu"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+<!-- ====================== HERO ====================== -->
+<section class="hero" id="accueil">
+  <div class="hero__grid"></div>
+  <div class="hero__glow"></div>
+  <div class="container">
+    <div class="hero__inner">
+      <div class="hero__text">
+        <span class="eyebrow reveal">INGÉNIEUR MÉCATRONIQUE · SYSTÈMES EMBARQUÉS &amp; AUTOMATIQUE</span>
+        <h1 class="reveal d1">Badreddine<br>Zouaoui.</h1>
+        <h2 class="reveal d2">Je conçois et fiabilise des systèmes embarqués, <span class="hl">du capteur à la commande.</span></h2>
+        <p class="hero__lead reveal d3">
+          Ingénieur d'État en mécatronique, diplômé d'un <b>Master 2 Systèmes Automatiques Mobiles</b>. J'interviens sur toute la chaîne — électronique, logiciel embarqué, automatique et vision par ordinateur — pour transformer un besoin en système concret, testé et validé. Actuellement en <b>stage de fin d'études à la SNCF</b>, sur l'automatisation et la sécurisation des manœuvres ferroviaires.
+        </p>
+        <div class="hero__cta reveal d4">
+          <a class="btn btn--solid btn--lg" href="#projets">Voir mes projets <svg class="icon" width="17" height="17"><use href="#i-arrow-right"/></svg></a>
+          <a class="btn btn--ghost btn--lg" href="#contact">Me contacter</a>
+        </div>
+        <div class="hero__socials reveal d4">
+          <a class="social" href="https://www.linkedin.com/in/badreddine-zouaoui" target="_blank" rel="noopener" aria-label="LinkedIn"><svg class="icon"><use href="#i-linkedin"/></svg></a>
+          <!-- TODO : remplace "ton-pseudo" par ton vrai identifiant GitHub -->
+          <a class="social" href="https://github.com/ton-pseudo" target="_blank" rel="noopener" aria-label="GitHub"><svg class="icon"><use href="#i-github"/></svg></a>
+          <a class="social" href="mailto:zouaouibadreddine2@gmail.com" aria-label="E-mail"><svg class="icon"><use href="#i-mail"/></svg></a>
+          <a class="social" href="tel:+33668517457" aria-label="Téléphone"><svg class="icon"><use href="#i-phone"/></svg></a>
+        </div>
+      </div>
+
+      <!-- Signature : schéma d'itinéraire / aiguillage commandé -->
+      <div class="hero__visual reveal d3">
+        <div class="switch" aria-hidden="true">
+          <svg viewBox="0 0 520 330" role="img">
+            <!-- cadre technique (coins) -->
+            <path class="sw-frame" d="M14 26 V14 H26"/>
+            <path class="sw-frame" d="M494 26 V14 H506"/>
+            <path class="sw-frame" d="M14 304 V316 H26"/>
+            <path class="sw-frame" d="M494 304 V316 H506"/>
+
+            <!-- traverses (ties) sur la ligne d'approche -->
+            <g>
+              <line class="sw-tie" x1="70" y1="196" x2="70" y2="216"/>
+              <line class="sw-tie" x1="104" y1="196" x2="104" y2="216"/>
+              <line class="sw-tie" x1="138" y1="196" x2="138" y2="216"/>
+              <line class="sw-tie" x1="172" y1="196" x2="172" y2="216"/>
+              <line class="sw-tie" x1="206" y1="196" x2="206" y2="216"/>
+            </g>
+
+            <!-- voie A (directe) — itinéraire non sélectionné -->
+            <path class="sw-rail-muted" d="M250 206 H486"/>
+            <!-- voie B (déviée) + approche — itinéraire ACTIF -->
+            <path id="route" class="sw-rail-active" d="M40 206 L250 206 C 312 206 330 120 432 120 L 486 120"/>
+
+            <!-- aiguille (lame) orientée vers la voie B -->
+            <line class="sw-blade" x1="238" y1="206" x2="266" y2="190"/>
+
+            <!-- signaux -->
+            <circle class="sw-sig-closed" cx="486" cy="206" r="5.5"/>
+            <circle class="sw-sig-open-ring" cx="486" cy="120" r="9"/>
+            <circle class="sw-sig-open" cx="486" cy="120" r="5.5"/>
+
+            <!-- circulation (point mobile) -->
+            <circle class="sw-dot" r="5.5">
+              <animateMotion dur="4.2s" repeatCount="indefinite" keyPoints="0;1" keyTimes="0;1" calcMode="linear">
+                <mpath href="#route"/>
+              </animateMotion>
+            </circle>
+
+            <!-- libellés -->
+            <text class="sw-label" x="40" y="186">LIGNE</text>
+            <text class="sw-label" x="214" y="244">AIG · 01</text>
+            <text class="sw-label" x="430" y="206">V·A</text>
+            <text class="sw-label on" x="430" y="108">V·B</text>
+          </svg>
+          <div class="switch__cap"><span class="dotmark"></span>SCHÉMA D'ITINÉRAIRE — AIGUILLAGE COMMANDÉ</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero__scroll" aria-hidden="true">
+    <span>DÉFILER</span>
+    <svg class="icon chev" width="18" height="18"><use href="#i-arrow-down"/></svg>
+  </div>
+</section>
+
+<!-- ====================== À PROPOS ====================== -->
+<section class="section" id="apropos">
+  <div class="container">
+    <div class="head reveal">
+      <div class="kicker"><span class="idx">01</span> À propos <span class="rule"></span></div>
+      <h2>Un profil mécatronique, orienté terrain.</h2>
+    </div>
+    <div class="about">
+      <div class="about__body reveal">
+        <p>
+          Je suis ingénieur en <b>mécatronique</b> : un profil qui vit à la frontière du mécanique, de l'électronique et du logiciel. Mon parcours s'est construit à l'<b>École Nationale Supérieure des Technologies Avancées</b> (diplôme d'ingénieur d'État, mention <span class="accenttext">Très Bien</span>, classé Top 3), puis s'est spécialisé à l'<b>Université d'Évry — Paris-Saclay</b>, en E3A puis en Systèmes Automatiques Mobiles.
+        </p>
+        <p>
+          Ce que j'aime, c'est <b>construire des systèmes qui fonctionnent vraiment</b> : concevoir une architecture, programmer le firmware embarqué (ESP32, STM32), piloter des moteurs et des capteurs, fermer la boucle de commande, puis valider le tout en conditions réelles. J'associe l'<b>automatique</b> (Grafcet, automates, TIA Portal) à la <b>simulation</b> (MATLAB/Simulink, SolidWorks, ROS 2) et, de plus en plus, à la <b>vision par ordinateur</b> (YOLOv8).
+        </p>
+        <p>
+          Aujourd'hui, je mets ces compétences au service du <b>ferroviaire</b> : mon stage de fin d'études à la <b>SNCF (DTIPG)</b> porte sur l'automatisation et la sécurisation des manœuvres, du prototype d'IHM jusqu'à la validation sur site. Je cherche à prolonger cette dynamique sur des défis d'ingénierie concrets et exigeants.
+        </p>
+      </div>
+      <aside class="spec reveal d1" aria-label="Informations">
+        <div class="spec__row"><span class="k">Statut</span><span class="v ok">Recherche d'opportunité</span></div>
+        <div class="spec__row"><span class="k">Poste actuel</span><span class="v">Stage fin d'études · SNCF</span></div>
+        <div class="spec__row"><span class="k">Localisation</span><span class="v">Île-de-France</span></div>
+        <div class="spec__row"><span class="k">Mobilité</span><span class="v">France entière</span></div>
+        <div class="spec__row"><span class="k">Permis</span><span class="v">B</span></div>
+        <div class="spec__row"><span class="k">Langues</span><span class="v">Français · Anglais</span></div>
+        <div class="spec__row"><span class="k">Centres d'intérêt</span><span class="v">IA · Échecs · Sudoku</span></div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== EXPÉRIENCE ====================== -->
+<section class="section section--alt" id="experience">
+  <div class="container">
+    <div class="head reveal">
+      <div class="kicker"><span class="idx">02</span> Expérience <span class="rule"></span></div>
+      <h2>Là où j'ai mis les mains.</h2>
+      <p>Du stage découverte à un stage de fin d'études dans l'innovation ferroviaire — un fil rouge : la conception et la fiabilisation de systèmes embarqués et automatisés.</p>
+    </div>
+    <div class="timeline">
+      <div class="tl tl--now reveal">
+        <div class="tl__date">FÉV 2026 — AOÛT 2026 <span class="tl__badge">EN COURS</span></div>
+        <div class="tl__role">Assistant chef de projet Innovation</div>
+        <div class="tl__org">SNCF — Direction Technologies, Innovation &amp; Projets Groupe <span class="at">(DTIPG)</span></div>
+        <ul class="tl__list">
+          <li>Développement d'un prototype d'IHM pour l'automatisation et la sécurisation des manœuvres ferroviaires.</li>
+          <li>Définition des exigences fonctionnelles liées à l'automatisation et à la sécurité des manœuvres.</li>
+          <li>Réalisation d'essais sur prototypes et identification des ajustements techniques nécessaires.</li>
+          <li>Validation technique en environnement ferroviaire réel et suivi des corrections avant déploiement.</li>
+          <li>Développement de solutions de supervision de sites de maintenance.</li>
+          <li>Rédaction et mise à jour de la documentation technique (essais, résultats de validation).</li>
+        </ul>
+      </div>
+      <div class="tl reveal">
+        <div class="tl__date">FÉV 2024 — MAI 2024</div>
+        <div class="tl__role">Ingénieur Mécatronique — Stage d'insertion</div>
+        <div class="tl__org">SPE — Société de Production de l'Électricité</div>
+        <ul class="tl__list">
+          <li>Études de projet, analyses fonctionnelles et rédaction du cahier des charges.</li>
+          <li>Conception et réalisation d'un prototype de système automatisé à dominante électromécanique et électronique.</li>
+          <li>Programmation, calibration des moteurs et développement du logiciel de contrôle d'une CNC pour circuits PCB.</li>
+        </ul>
+      </div>
+      <div class="tl reveal">
+        <div class="tl__date">DÉC 2022 — JAN 2023</div>
+        <div class="tl__role">Ingénieur Maintenance — Stage d'insertion</div>
+        <div class="tl__org">Maghreb Pipe Industries</div>
+        <ul class="tl__list">
+          <li>Participation aux activités de maintenance et de fiabilisation des équipements industriels.</li>
+          <li>Conception et intégration d'un robot mobile autonome embarquant capteurs, microcontrôleurs et fonctions de contrôle.</li>
+        </ul>
+      </div>
+      <div class="tl reveal">
+        <div class="tl__date">DÉC 2021 — JAN 2022</div>
+        <div class="tl__role">Stage Découverte</div>
+        <div class="tl__org">Société de Maintenance des Équipements Industriels</div>
+        <ul class="tl__list">
+          <li>Lecture et interprétation de schémas électriques et mécaniques.</li>
+          <li>Électronique embarquée, instrumentation et intégration système.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== PROJETS ====================== -->
+<section class="section" id="projets">
+  <div class="container">
+    <div class="head reveal">
+      <div class="kicker"><span class="idx">03</span> Projets <span class="rule"></span></div>
+      <h2>Quelques systèmes que j'ai construits.</h2>
+      <p>Des projets académiques où modélisation, commande, embarqué et IA se rencontrent.</p>
+    </div>
+    <div class="projects">
+      <article class="project project--feature reveal">
+        <div class="project__top">
+          <div class="project__ico"><svg class="icon" width="24" height="24"><use href="#i-drone"/></svg></div>
+          <div class="project__meta">JANV 2026</div>
+        </div>
+        <span class="project__tag">PROJET PHARE · VISION PAR ORDINATEUR</span>
+        <h3 class="project__title">Détection par drone basée sur YOLOv8</h3>
+        <p class="project__desc">
+          Conception d'un système de vision par ordinateur, basé sur <b>YOLOv8</b>, pour la détection des casques de chantier par drone. Implémentation et tests sous <b>ROS 2 / Gazebo</b>, avec capteurs embarqués et traitement en temps réel — de l'entraînement du modèle jusqu'à l'intégration sur la plateforme.
+        </p>
+        <div class="project__stack"><span>YOLOv8</span><span>Computer Vision</span><span>ROS 2</span><span>Gazebo</span><span>Python</span><span>Temps réel</span></div>
+      </article>
+
+      <article class="project reveal d1">
+        <div class="project__top">
+          <div class="project__ico"><svg class="icon" width="24" height="24"><use href="#i-flow"/></svg></div>
+          <div class="project__meta">JUIN 2025</div>
+        </div>
+        <h3 class="project__title">Commande d'un drone par approche Takagi-Sugeno</h3>
+        <p class="project__desc">
+          Développement d'un modèle <b>T–S</b> d'un drone et conception d'un correcteur stable et robuste, validé par simulations sous MATLAB/Simulink.
+        </p>
+        <div class="project__stack"><span>Takagi-Sugeno</span><span>Commande robuste</span><span>MATLAB/Simulink</span><span>Modélisation</span></div>
+      </article>
+
+      <article class="project reveal d2">
+        <div class="project__top">
+          <div class="project__ico"><svg class="icon" width="24" height="24"><use href="#i-cog"/></svg></div>
+          <div class="project__meta">JUIN 2023</div>
+        </div>
+        <h3 class="project__title">Véhicule à guidage automatique (AGV)</h3>
+        <p class="project__desc">
+          Étude et conception mécanique d'un AGV pour le transport de charges, simulé sous MATLAB/Simulink. Choix des moteurs et des capteurs, et programmation de la navigation autonome.
+        </p>
+        <div class="project__stack"><span>AGV</span><span>Navigation autonome</span><span>SolidWorks</span><span>MATLAB/Simulink</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== COMPÉTENCES ====================== -->
+<section class="section section--alt" id="competences">
+  <div class="container">
+    <div class="head reveal">
+      <div class="kicker"><span class="idx">04</span> Compétences <span class="rule"></span></div>
+      <h2>Ma boîte à outils.</h2>
+    </div>
+    <div class="skills">
+      <div class="skill reveal">
+        <div class="skill__h"><svg class="icon"><use href="#i-cog"/></svg><h3>Conception &amp; Simulation</h3></div>
+        <div class="chips"><span class="chip">MATLAB/Simulink</span><span class="chip">SolidWorks</span><span class="chip">ROS 2</span></div>
+      </div>
+      <div class="skill reveal d1">
+        <div class="skill__h"><svg class="icon"><use href="#i-cpu"/></svg><h3>Électronique</h3></div>
+        <div class="chips"><span class="chip">Arduino</span><span class="chip">STM32</span><span class="chip">Proteus</span><span class="chip">FPGA</span><span class="chip">IoT</span></div>
+      </div>
+      <div class="skill reveal d2">
+        <div class="skill__h"><svg class="icon"><use href="#i-flow"/></svg><h3>Automatique</h3></div>
+        <div class="chips"><span class="chip">TIA Portal</span><span class="chip">LabVIEW</span><span class="chip">Grafcet</span><span class="chip">Automates (PLC)</span></div>
+      </div>
+      <div class="skill reveal">
+        <div class="skill__h"><svg class="icon"><use href="#i-code"/></svg><h3>Programmation</h3></div>
+        <div class="chips"><span class="chip">Python</span><span class="chip">C</span><span class="chip">C++</span><span class="chip">Java</span></div>
+      </div>
+      <div class="skill reveal d1">
+        <div class="skill__h"><svg class="icon"><use href="#i-doc"/></svg><h3>Bureautique</h3></div>
+        <div class="chips"><span class="chip">Word</span><span class="chip">Excel</span><span class="chip">PowerPoint</span></div>
+      </div>
+      <div class="skill reveal d2">
+        <div class="skill__h"><svg class="icon"><use href="#i-spark"/></svg><h3>Soft skills</h3></div>
+        <div class="chips"><span class="chip">Travail d'équipe</span><span class="chip">Curiosité</span><span class="chip">Ponctualité</span><span class="chip">Créativité</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== FORMATION ====================== -->
+<section class="section" id="formation">
+  <div class="container">
+    <div class="head reveal">
+      <div class="kicker"><span class="idx">05</span> Formation <span class="rule"></span></div>
+      <h2>Mon parcours académique.</h2>
+    </div>
+    <div class="timeline">
+      <div class="tl reveal">
+        <div class="tl__date">SEPT 2025 — JUIL 2026</div>
+        <div class="tl__role">Master 2 — Systèmes Automatiques Mobiles</div>
+        <div class="tl__org">Université d'Évry <span class="at">— Paris-Saclay</span></div>
+        <p class="tl__sub">Observateurs et capteurs virtuels · Machine Learning · AI for Computer Vision · Intégration des systèmes de commande.</p>
+      </div>
+      <div class="tl reveal">
+        <div class="tl__date">SEPT 2024 — JUIL 2025</div>
+        <div class="tl__role">Master 1 — Électronique, Énergie Électrique, Automatique (E3A)</div>
+        <div class="tl__org">Université d'Évry <span class="at">— Paris-Saclay</span></div>
+        <p class="tl__sub">Traitement du signal et des images · Systèmes temps réel · Programmation orientée objet · Modélisation des systèmes.</p>
+      </div>
+      <div class="tl reveal">
+        <div class="tl__date">SEPT 2019 — JUIL 2024 <span class="tl__badge">MENTION TRÈS BIEN · TOP 3</span></div>
+        <div class="tl__role">Ingénieur d'État + Master en Mécatronique</div>
+        <div class="tl__org">École Nationale Supérieure des Technologies Avancées</div>
+        <p class="tl__sub">Capteurs &amp; instrumentation · Systèmes embarqués · Électronique numérique &amp; analogique · Automatisme · Robotique.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== CONTACT ====================== -->
+<section class="section section--alt" id="contact">
+  <div class="container">
+    <div class="contact reveal">
+      <div class="kicker"><span class="idx">06</span> Contact</div>
+      <h2>Travaillons ensemble.</h2>
+      <p>Je suis ouvert aux opportunités en ingénierie et dans le secteur ferroviaire. Pour un poste, une mission, ou simplement échanger — ma boîte mail est toujours ouverte.</p>
+      <a class="btn btn--solid btn--lg" href="mailto:zouaouibadreddine2@gmail.com">
+        <svg class="icon" width="18" height="18"><use href="#i-mail"/></svg> Dire bonjour
+      </a>
+      <div class="contact__row">
+        <a class="social" href="https://www.linkedin.com/in/badreddine-zouaoui" target="_blank" rel="noopener" aria-label="LinkedIn"><svg class="icon"><use href="#i-linkedin"/></svg></a>
+        <a class="social" href="https://github.com/ton-pseudo" target="_blank" rel="noopener" aria-label="GitHub"><svg class="icon"><use href="#i-github"/></svg></a>
+        <a class="social" href="mailto:zouaouibadreddine2@gmail.com" aria-label="E-mail"><svg class="icon"><use href="#i-mail"/></svg></a>
+        <a class="social" href="tel:+33668517457" aria-label="Téléphone"><svg class="icon"><use href="#i-phone"/></svg></a>
+      </div>
+      <p class="contact__line">
+        <a href="mailto:zouaouibadreddine2@gmail.com">zouaouibadreddine2@gmail.com</a> &nbsp;·&nbsp; <a href="tel:+33668517457">+33 6 68 51 74 57</a>
+      </p>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ====================== FOOTER ====================== -->
+<footer class="footer">
+  <div class="container">
+    <p>Conçu &amp; développé par <b>Badreddine Zouaoui</b> · 2026 — Construit avec HTML, CSS &amp; un peu de JavaScript <span class="heart">●</span></p>
+  </div>
+</footer>
+
+<!-- ====================== SCRIPT ====================== -->
+<script>
+(function(){
+  "use strict";
+  var root = document.documentElement;
+
+  /* ---- safe storage helper (fonctionne sur GitHub Pages, ne casse jamais) ---- */
+  function safeGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+  function safeSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+
+  /* ---- THÈME : init depuis le choix mémorisé sinon préférence système ---- */
+  var saved = safeGet("theme");
+  if(saved){ root.setAttribute("data-theme", saved); }
+  else if(window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches){
+    root.setAttribute("data-theme","light");
+  }
+  var themeBtn = document.getElementById("themeToggle");
+  themeBtn.addEventListener("click", function(){
+    var next = root.getAttribute("data-theme") === "light" ? "dark" : "light";
+    root.setAttribute("data-theme", next);
+    safeSet("theme", next);
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if(meta){ meta.setAttribute("content", next === "light" ? "#f6f8fb" : "#0b0e13"); }
+  });
+
+  /* ---- NAV : ombre au scroll ---- */
+  var nav = document.getElementById("nav");
+  function onScroll(){ nav.classList.toggle("scrolled", window.scrollY > 12); }
+  onScroll();
+  window.addEventListener("scroll", onScroll, {passive:true});
+
+  /* ---- NAV mobile : ouvrir / fermer ---- */
+  var navToggle = document.getElementById("navToggle");
+  var navMenu = document.getElementById("navMenu");
+  var navToggleIcon = document.getElementById("navToggleIcon").querySelector("use");
+  function setMenu(open){
+    navMenu.classList.toggle("open", open);
+    navToggle.setAttribute("aria-expanded", String(open));
+    navToggleIcon.setAttribute("href", open ? "#i-close" : "#i-menu");
+  }
+  navToggle.addEventListener("click", function(){ setMenu(!navMenu.classList.contains("open")); });
+  navMenu.querySelectorAll("a").forEach(function(a){
+    a.addEventListener("click", function(){ setMenu(false); });
+  });
+
+  /* ---- RÉVÉLATION au scroll ---- */
+  var reveals = document.querySelectorAll(".reveal");
+  if("IntersectionObserver" in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target); }
+      });
+    }, {threshold:0.12, rootMargin:"0px 0px -8% 0px"});
+    reveals.forEach(function(el){ io.observe(el); });
+  } else {
+    reveals.forEach(function(el){ el.classList.add("in"); });
+  }
+
+  /* ---- NAV : lien actif selon la section visible ---- */
+  var sections = document.querySelectorAll("main section[id]");
+  var links = {};
+  document.querySelectorAll(".nav__link").forEach(function(l){
+    links[l.getAttribute("href").slice(1)] = l;
+  });
+  if("IntersectionObserver" in window){
+    var spy = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){
+          var id = en.target.getAttribute("id");
+          Object.keys(links).forEach(function(k){ links[k].classList.toggle("active", k === id); });
+        }
+      });
+    }, {rootMargin:"-45% 0px -50% 0px"});
+    sections.forEach(function(s){ spy.observe(s); });
+  }
+})();
+</script>
+</body>
+</html>
